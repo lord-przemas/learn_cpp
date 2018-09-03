@@ -18,7 +18,12 @@ void passArray4(const int tbl[])
 
 void wrongArraySize(int tbl[])
 {
-//  std::cout << sizeof(tbl) << std::endl;
+  std::cout << sizeof(tbl) << std::endl;
+}
+
+void correctArraySize(int (&tbl)[6])
+{
+  std::cout << sizeof(tbl) << std::endl;
 }
 
 template <typename T>
@@ -68,6 +73,7 @@ int main()
 
   std::cout << sizeof(tbl) << std::endl;
   wrongArraySize(tbl);
+  correctArraySize(tbl);
 
 
   Array tbl1 = {2.4, 5.232, 65.33, 64.23, 875.345};
