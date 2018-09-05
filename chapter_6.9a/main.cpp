@@ -3,6 +3,32 @@
 #include <cstring>
 #include <vector>
 
+
+void kindsOfArrays()
+{
+  int numbers1a[4] {1 ,2 ,3, 4}; // creates fixed array: {1, 2, 3, 4}
+  int numbers2a[4] {1 ,2};       // creates fixed array: {1, 2, 0, 0}
+  //int numbers3a[4] {1 ,2 ,3, 4, 5} ; // NOT OK! Amount of numbers exceeds fixed array length
+  
+  int numbers1b[] {1 ,2 ,3, 4}; // creates fixed array: {1, 2, 3, 4}
+  int numbers2b[] {1 ,2};       // creates fixed array: {1, 2}
+  int numbers3b[] {1 ,2 ,3, 4, 5} ; // fixed array length is deduced from initializer list
+
+  int* numbers1c = new int[4] {1 ,2 ,3, 4}; // creates dynamic array: {1, 2, 3, 4}
+  int* numbers2c = new int[4] {1 ,2};       // creates dynamic array: {1, 2, 0, 0}
+//  int* numbers3c = new int[4] {1 ,2 ,3, 4, 5} ; // NOT OK! Amount of numbers exceeds dynamic array length
+
+//  int* numbers1d = new int[] {1 ,2 ,3, 4}; // It's NOT OK! Length of dynamic array must be explicit
+  for(int i {}; i < 4; ++i)
+    std::cout << numbers2c[i] << std::endl;
+
+  delete [] numbers1c;
+  delete [] numbers2c;
+}
+
+
+/**********************************************/
+
 class HeavyObject
 {
   public:
@@ -31,6 +57,7 @@ void HeavyObject::operator=(const HeavyObject& obj)
 
 int main()
 {
+  kindsOfArrays();
 // Calls only Copy assignement on all objects in table
 
   const unsigned int SIZE = 3;
