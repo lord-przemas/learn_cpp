@@ -72,7 +72,23 @@ class PublicInheritance : public Members
 //    PublicInheritance(const PublicInheritance& mc) : Members{mc.a, mc.b} {}
 };
 
+class Inner
+{
+  public:
+    Inner() { std::cout << "Inner()" << std::endl; }
+    Inner(int) { std::cout << "Inner(int)" << std::endl; }
+};
 
+class Outer
+{
+  private:
+    Inner inner;
+
+  public:
+    Outer() { std::cout << "Outer()" << std::endl << std::endl; }
+    Outer(int) { std::cout << "Outer(int)" << std::endl << std::endl; }
+    Outer(double) : inner{ 1 } { std::cout << "Outer(double)" << std::endl << std::endl; }
+};
 
 int main()
 {
@@ -106,7 +122,9 @@ int main()
   ExplicitConstructor explicitCtor6 = explicitCtor4;
   explicitCtor6 = explicitCtor4;
   
-
+  Outer outer1;
+  Outer outer2 { 123 };
+  Outer outer3 { 1.23 };
 
   return 0;
 }
