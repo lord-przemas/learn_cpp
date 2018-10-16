@@ -13,7 +13,8 @@ class FixedArray
     FixedArray(const FixedArray&) = delete;
     FixedArray(std::initializer_list<T> li);
 
-    T& operator[](int index) const { return fixedArray[index]; }
+    T& operator[](int index) { return fixedArray[index]; }
+    const T& operator[](int index) const { return fixedArray[index]; }
     T* begin() { return fixedArray; }
     T* end() { return fixedArray + SIZE; }
     const T* cbegin() const { return fixedArray; }
