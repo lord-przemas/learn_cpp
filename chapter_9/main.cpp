@@ -1,7 +1,12 @@
 #include <iostream>
 
 
-class Object {};
+class Object 
+{
+  public:
+    Object() { std::cout << "Object()" << std::endl; }
+    Object(const Object& obj) { std::cout << "Object(const Object& obj)" << std::endl; }
+};
 
 int operator+(const Object& a, int b) { return 123; }
 Object operator+(int a, const Object& b) { return Object{}; }
@@ -26,6 +31,46 @@ class Operators
     bool operator!() const { return true; }
 };
 
+class TypeCast
+{
+  private:
+    int number {};
+
+  public:
+    TypeCast(int x) : number{x}{}
+    operator int() const { return number; }
+    operator Object() const { 
+      std::cout << "operator Object()" << std::endl;
+      return Object{}; 
+    }
+};
+
+class Cents
+{
+  private:
+    int m_cents {};
+
+  public:
+    Cents(int cents) : m_cents {cents} {}
+    
+    friend void printCents(const Cents& cents);
+};
+
+
+void printCents(const Cents& cents)
+{
+  std::cout << "Cents: " << cents.m_cents << std::endl;
+}
+
+class Dollars
+{
+  private:
+    int m_dollars {};
+
+  public:
+    Dollars(int dollars) : m_dollars {dollars} {}
+    operator Cents() const { return Cents{m_dollars*100}; }
+};
 
 int main()
 {
@@ -37,6 +82,18 @@ int main()
   if(!op1)
     std::cout << "op1 == true" << std::endl;
 
+  std::cout << std::endl;
+
+  TypeCast obj = 777;
+  int number { obj };
+  std::cout << "Number: " << number << std::endl;
+
+  Object chuj =  obj;
+  
+  std::cout << std::endl;
+
+  Dollars dollars {12};
+  printCents(dollars);
 
   return 0;
 }
