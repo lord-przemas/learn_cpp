@@ -37,6 +37,7 @@ flags = [
     '-x',
     'c++',
     '-std=c++17',
+    '-I/home/przemas/proj/cpp/boost_1_69_0'
 ]
 
 
