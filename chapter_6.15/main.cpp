@@ -10,15 +10,15 @@ class FixedArray
   
   public:
     FixedArray() = delete;
-    FixedArray(const FixedArray&) = delete;
+    FixedArray(const FixedArray&);
     FixedArray(std::initializer_list<T> li);
 
     T& operator[](int index) { return fixedArray[index]; }
     const T& operator[](int index) const { return fixedArray[index]; }
     T* begin() { return fixedArray; }
     T* end() { return fixedArray + SIZE; }
-    const T* cbegin() const { return fixedArray; }
-    const T* cend() const { return fixedArray + SIZE; }
+    const T* begin() const { return fixedArray; }
+    const T* end() const { return fixedArray + SIZE; }
     constexpr size_t size() const { return SIZE; };
 };
 
@@ -38,6 +38,17 @@ FixedArray<T,SIZE>::FixedArray(std::initializer_list<T> li)
     throw FixedArrayException {};
   }
 }
+
+template <typename T, size_t SIZE>
+FixedArray<T,SIZE>::FixedArray(const FixedArray<T,SIZE>& fArray)
+{
+  int index {};
+  for (const auto& element : fArray)
+  {
+    fixedArray[index++] = element;
+  }
+}
+
 
 // It's not possible to get array length even in this way
 template <typename T>
@@ -65,6 +76,15 @@ int main()
     }
     std::cout << "FixedArray length: " << sizeof(arr) << std::endl;
     std::cout << "FixedArray length: " << arr.size() << std::endl;
+
+    FixedArray<int, arr.size()> arrCopy { arr };
+    for(auto& element : arrCopy)
+    {
+      std::cout << element << std::endl;
+    }
+    std::cout << "FixedArray length: " << sizeof(arr) << std::endl;
+    std::cout << "FixedArray length: " << arr.size() << std::endl;
+
   }
   catch(FixedArrayException ex)
   {
