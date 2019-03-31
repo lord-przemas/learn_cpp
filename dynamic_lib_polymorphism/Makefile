@@ -5,6 +5,7 @@ CXX = g++
 CFLAGS := -std=c++17 -fpic
 INCLUDES := -I..
 LDLIBS := -L$(PWD) -lpolymorphism
+#LDLIBS := -L$(PWD) -lpolymorphism -Wl,-rpath,$(PWD)
 
 all: build $(OBJECTS_CMP)
 	@$(CXX) -shared $(OBJECTS_LIB) -o libpolymorphism.so
@@ -19,5 +20,5 @@ build:
 	@mkdir -p build
 	
 clean:
-	@rm -rf build app
+	@rm -rf build app libpolymorphism.so
 	@echo "Cleaning done!"
