@@ -22,6 +22,43 @@ ExplicitCtors::ExplicitCtors(const ExplicitCtors& x)
   std::cout << "ExplicitCtors(const ExplicitCtors& x)" << std::endl;
 }
 
+//**************************************************************
+
+class ImplicitCtors
+{
+  public:
+    ImplicitCtors(int x);
+    ImplicitCtors(const char* x);
+
+};
+
+ImplicitCtors::ImplicitCtors(int x)
+{
+  std::cout << "ImplicitCtors(int x)" << std::endl;
+}
+
+ImplicitCtors::ImplicitCtors(const char* x)
+{
+  std::cout << "ImplicitCtors(const char* x)" << std::endl;
+}
+
+void takeImplicitCtors(ImplicitCtors ictors)
+{
+  std::cout << "takeImplicitCtors(ImplicitCtors ictors)" << std::endl;
+}
+
+class TakeImplicitCtors
+{
+  public:
+    TakeImplicitCtors(ImplicitCtors ictors);
+};
+
+TakeImplicitCtors::TakeImplicitCtors(ImplicitCtors ictors)
+{
+  std::cout << "TakeImplicitCtors(ImplicitCtors ictors)" << std::endl;
+}
+
+//**************************************************************
 
 int main()
 {
@@ -38,6 +75,11 @@ int main()
   ExplicitCtors ectors8 = static_cast<ExplicitCtors>("Hello World!");
   ExplicitCtors ectors9 = static_cast<ExplicitCtors>(ectors5);
 
+  takeImplicitCtors(123);
+  TakeImplicitCtors takeIctors1 {123};
+  TakeImplicitCtors takeIctors2 {"Hello World!"};
+//  TakeImplicitCtors takeIctors3 = 123;
+//  TakeImplicitCtors takeIctors4 = "Hello World!";
 
   return 0;
 }
