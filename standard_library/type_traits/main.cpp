@@ -113,6 +113,32 @@ class SpecTest<T1, T2, Foo<int, int> >
 
 enum E {};
 
+
+template < typename T, bool = std::is_function<T>::value, bool = std::is_class<T>::value>
+class BasicMetaProgramming
+{
+};
+
+template < typename T>
+class BasicMetaProgramming<T, true, false>
+{
+  public:
+    BasicMetaProgramming()
+    {
+      std::cout << "BasicMetaProgramming - function handling" << std::endl;
+    }
+};
+
+template < typename T>
+class BasicMetaProgramming<T, false, true>
+{
+  public:
+    BasicMetaProgramming()
+    {
+      std::cout << "BasicMetaProgramming - class handling" << std::endl;
+    }
+};
+
 int main()
 {
   int a;
@@ -129,12 +155,18 @@ int main()
   SpecTest<int, float> sp1 {};
   SpecTest<int, Test> sp2 {};
   SpecTest<int, int> sp3 {};
+  SpecTest<int, int, float> sp4 {};
 
   std::cout << std::endl;
   
   std::cout << my::is_array<int>::value << std::endl;
   std::cout << my::is_array<int[]>::value << std::endl;
   std::cout << my::is_array<int[3]>::value << std::endl;
+
+  std::cout << std::endl;
+  
+  BasicMetaProgramming<Test> bmp1 {};
+  BasicMetaProgramming<void()> bmp2 {};
 
   std::cout << std::endl;
 
