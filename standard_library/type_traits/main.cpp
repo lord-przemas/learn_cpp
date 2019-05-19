@@ -139,6 +139,35 @@ class BasicMetaProgramming<T, false, true>
     }
 };
 
+template < typename T, typename = void>
+class BasicMetaProgramming2
+{
+  public:
+    BasicMetaProgramming2()
+    {
+      std::cout << "BasicMetaProgramming2 - void" << std::endl;
+    }
+};
+
+template < typename T>
+class BasicMetaProgramming2<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
+{
+  public:
+    BasicMetaProgramming2()
+    {
+      std::cout << "BasicMetaProgramming2 - floating point" << std::endl;
+    }
+};
+template < typename T>
+class BasicMetaProgramming2<T, typename std::enable_if<std::is_integral<T>::value>::type>
+{
+  public:
+    BasicMetaProgramming2()
+    {
+      std::cout << "BasicMetaProgramming2 - integral" << std::endl;
+    }
+};
+
 int main()
 {
   int a;
@@ -167,6 +196,12 @@ int main()
   
   BasicMetaProgramming<Test> bmp1 {};
   BasicMetaProgramming<void()> bmp2 {};
+
+  std::cout << std::endl;
+
+  BasicMetaProgramming2<float> a1;
+  BasicMetaProgramming2<int> a2;
+  BasicMetaProgramming2<Test> a3;
 
   std::cout << std::endl;
 
