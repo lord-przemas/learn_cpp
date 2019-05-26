@@ -168,8 +168,48 @@ class BasicMetaProgramming2<T, typename std::enable_if<std::is_integral<T>::valu
     }
 };
 
+
+class Object
+{
+  public:
+//    Object() = default;
+//    Object(const Object&) = delete;
+    Object(int a, float b = 2.5) {}
+};
+
+class Base {};
+//class Derivied : private Base {};
+class Derivied : public Base 
+{
+  public:
+    operator Object() const { return Object { 1, 2.0 }; }
+
+};
+
+
 int main()
 {
+
+  std::cout << std::boolalpha << std::endl;
+  std::cout << "is_constructible<Object>: " << std::is_constructible<Object>::value << std::endl;
+  std::cout << "is_constructible<Object, int>: " << std::is_constructible<Object, int>::value << std::endl;
+  std::cout << "is_constructible<Object, int, float>: " << std::is_constructible<Object, int, float>::value << std::endl;
+  std::cout << "is_constructible<Object, float>: " << std::is_constructible<Object, float>::value << std::endl;
+  std::cout << "is_copy_constructible: " << std::is_copy_constructible<Object>::value << std::endl;
+  std::cout << "is_trivially_copy_constructible: " << std::is_trivially_copy_constructible<Object>::value << std::endl;
+  std::cout << std::endl;
+
+  std::cout << "is_convertible<Derivied, Base>: " << std::is_convertible<Derivied, Base>::value << std::endl;
+  std::cout << "is_convertible<Derivied&, Base&>: " << std::is_convertible<Derivied&, Base&>::value << std::endl;
+  std::cout << "is_convertible<Derivied*, Base*>: " << std::is_convertible<Derivied*, Base*>::value << std::endl;
+  std::cout << "is_convertible<Derivied&, Base&>: " << std::is_convertible<Derivied*, Base*>::value << std::endl;
+  std::cout << "is_convertible<Base, Derivied>: " << std::is_convertible<Base, Derivied>::value << std::endl;
+  std::cout << "is_convertible<Base*, Derivied*>: " << std::is_convertible<Base*, Derivied*>::value << std::endl;
+  std::cout << std::endl;
+
+  std::cout << "is_convertible<Derivied, Object>: " << std::is_convertible<Derivied, Object>::value << std::endl;
+  std::cout << std::endl;
+
   int a;
   int b;
   float c;
