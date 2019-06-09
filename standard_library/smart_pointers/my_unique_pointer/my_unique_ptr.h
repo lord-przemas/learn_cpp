@@ -6,16 +6,17 @@
 namespace my
 {
 
+  template<typename T>
   class Deleter
   {
     public:
-    void operator()(int* p) const
+    void operator()(T* p) const
     {
       delete p;
     }
   };
 
-  template<typename T, typename D = Deleter>
+  template<typename T, typename D = Deleter<T>>
   class unique_ptr
   {
     private:
@@ -28,10 +29,23 @@ namespace my
       {
       }
       
+      template<typename Tp>
+      unique_ptr(unique_ptr<Tp>&& uptr)
+        : ptr {uptr.release()}
+      {
+      }
+
       unique_ptr(unique_ptr&& uptr)
         : ptr {uptr.ptr}
       {
         uptr.ptr = nullptr;
+      }
+
+      template<typename Tp>
+      void operator=(unique_ptr<Tp>&& uptr)
+      {
+        deleter(ptr);
+        ptr = uptr.release();
       }
 
       void operator=(unique_ptr&& uptr)
@@ -97,10 +111,10 @@ namespace my
       operator bool() { return static_cast<bool>(ptr); }
   };
 
-  template <typename T>
-  unique_ptr<T> make_unique(T x)
+  template <typename T, typename... Args>
+  unique_ptr<T> make_unique(Args... x)
   {
-    return unique_ptr<T>{ new T { x } };
+    return unique_ptr<T>{ new T { x... } };
   }
   
 }
