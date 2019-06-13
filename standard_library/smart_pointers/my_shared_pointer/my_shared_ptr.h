@@ -6,16 +6,17 @@
 namespace my
 {
 
+  template<typename T>
   class Deleter
   {
     public:
-    void operator()(int* p) const
+    void operator()(T* p) const
     {
       delete p;
     }
   };
 
-  template<typename T, typename D = Deleter>
+  template<typename T, typename D = Deleter<T>>
   class shared_ptr
   {
     private:
@@ -39,6 +40,10 @@ namespace my
       (*counter)++;
     }
 
+
+    template <typename Tp, typename Dp>
+    friend class shared_ptr;
+
     public:
       shared_ptr(T* p, const D& del = D{})
       : ptr {p},
@@ -53,7 +58,25 @@ namespace my
       {
         inc();
       }
+
+      template <typename Tp>
+      shared_ptr(const shared_ptr<Tp>& sptr)
+      : ptr { sptr.ptr },
+        counter { sptr.counter }
+      {
+        inc();
+      }
+
       shared_ptr(shared_ptr&& sptr)
+      : ptr {sptr.ptr},
+        counter { sptr.counter }
+      {
+        sptr.ptr = nullptr;
+        sptr.counter = nullptr;
+      }
+
+      template <typename Tp>
+      shared_ptr(shared_ptr<Tp>&& sptr)
       : ptr {sptr.ptr},
         counter { sptr.counter }
       {
@@ -68,7 +91,27 @@ namespace my
         counter = sptr.counter;
         inc();
       }
+
+      template <typename Tp>
+      void operator=(const shared_ptr<Tp>& sptr)
+      {
+        dec();
+        ptr = sptr.ptr;
+        counter = sptr.counter;
+        inc();
+      }
+
       void operator=(shared_ptr&& sptr)
+      {
+        dec();
+        ptr = sptr.ptr;
+        counter = sptr.counter;
+        sptr.ptr = nullptr;
+        sptr.counter = nullptr;
+      }
+
+      template <typename Tp>
+      void operator=(shared_ptr<Tp>&& sptr)
       {
         dec();
         ptr = sptr.ptr;
@@ -124,10 +167,10 @@ namespace my
       operator bool() { return static_cast<bool>(ptr); }
   };
 
-  template <typename T>
-  shared_ptr<T> make_shared(T x)
+  template <typename T, typename... Args>
+  shared_ptr<T> make_shared(Args... x)
   {
-    return shared_ptr<T>{ new T { x } };
+    return shared_ptr<T>{ new T { x... } };
   }
   
 }
