@@ -21,6 +21,23 @@ int findUniqueCharIndex(const std::string text)
   return -1;
 }
 
+int findUniqueCharIndexV2(const std::string text)
+{
+  const int textSize = text.size();
+  int i;
+  for(int k = 0; k < textSize; k++) {
+    for(i = 0; i < textSize; i++) {
+      if(k == i)
+        continue;
+      else if(text[k] == text[i])
+        break;
+    }
+    if(i == textSize)
+      return k;
+  }
+  return -1;
+}
+
 template <typename T>
 int binarySearchIter(T* tbl, int size, T target) {
 
@@ -29,14 +46,14 @@ int binarySearchIter(T* tbl, int size, T target) {
 
   while (begin <= end)
   {
-    int mid_index { (end + begin) / 2 };
+    int mindex { (end + begin) / 2 };
 
-    if(target < tbl[mid_index])
-      end = mid_index - 1;
-    else if(target > tbl[mid_index])
-      begin = mid_index + 1;
+    if(target < tbl[mindex])
+      end = mindex - 1;
+    else if(target > tbl[mindex])
+      begin = mindex + 1;
     else
-      return mid_index;
+      return mindex;
   }
   return -1;
 }
@@ -46,49 +63,52 @@ int binarySearchRecursive(T* tbl, int begin, int end, T target) {
   if(begin > end)
     return -1;
 
-  const int mid_index { (end + begin) / 2 };
+  const int mindex { (end + begin) / 2 };
 
-  if(target < tbl[mid_index])
-    return binarySearchRecursive(tbl, begin, mid_index - 1, target);
-  else if(target > tbl[mid_index])
-    return binarySearchRecursive(tbl, mid_index + 1, end, target);
+  if(target < tbl[mindex])
+    return binarySearchRecursive(tbl, begin, mindex - 1, target);
+  else if(target > tbl[mindex])
+    return binarySearchRecursive(tbl, mindex + 1, end, target);
   else
-    return mid_index;
+    return mindex;
 }
 
 template <typename T>
 int rotateBits(T number, int bitCount)
 {
-  constexpr int bitBase {sizeof(T) * 8};
-
-  T rBits {number << (bitBase - bitCount % bitBase)};
-  number >>= bitCount;
-  return rBits | number;
+  constexpr int numOfBits {sizeof(T)*8};
+  return (number << (numOfBits - bitCount)) | (number >> bitCount);
 }
 
 void rotateArrayByOne(int tbl[], int size)
 {
-  int tmp {tbl[size - 1]};
+  int last {tbl[size - 1]};
   for(int i {size - 1}; i > 0; i--) {
     tbl[i] = tbl[i - 1];
   }
-  tbl[0] = tmp;
+  tbl[0] = last;
 }
 
-  template <typename T>
+
+template <typename T>
 void rotateArray(T tbl[], int size, int numCount)
 {
   numCount %= size;
-  T tmp[numCount];
-  for(int k {1}; k <= numCount; k++) {
-    tmp[numCount - k] = tbl[size - k];
-    for(int i {size - k}; i > numCount - 1; i -= numCount) {
-      tbl[i] = tbl[i - numCount];
+  T last[numCount];
+  int k {};
+  for(int i {size - numCount}; i < size; i++)
+    last[k++] = tbl[i];
+
+  for(int i {1}; i <= numCount; i++){
+    for(int j {size - i}; j >= numCount; j -= numCount){
+      tbl[j] = tbl[j - numCount];
     }
   }
+
   for(int k {}; k < numCount; k++)
-    tbl[k] = tmp[k];
+    tbl[k] = last[k];
 }
+
 
 int main()
 {
